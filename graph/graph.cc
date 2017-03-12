@@ -1,7 +1,10 @@
 // AlgorithmPractice.cpp : Defines the entry point for the console application.
 //
 
-#include "stdafx.h"
+#ifdef _WIN32
+  #include "stdafx.h"
+#endif
+
 #include <iostream>
 #include <memory>
 #include <vector>
@@ -98,13 +101,13 @@ using sNode = Node<std::string>;
 int main()
 {
 /*
-     a -  z
-	 |
-	 b
-	/ \
-   c   d
-	\ /
-	 o
+               a -  z
+               |
+               b
+              / \
+             c   d
+              \ /
+               o
 */
 
 	sNode a("Cesar");
