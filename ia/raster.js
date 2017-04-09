@@ -74,7 +74,7 @@
       if( blk.type  === 'block' ) return true;
 
       var ret = infected.find((obj)=>(blk.x === obj.x && blk.y === obj.y));
-    //  debugger;
+
       if(!isUndefined(ret)) return true;
 
       return false;
@@ -86,9 +86,10 @@
 
       setTimeout(function(){
         return function(x,y){redbox(x, y, BOX_SIZE)}(blk.x, blk.y)
-      }, incrementalAnim += 200);
+      }, incrementalAnim += 100);
+
       infected.push(blk);
-//debugger;
+
       //check up
       search(loc, x, y+1);
 
@@ -104,30 +105,6 @@
     };
   }();
 
-  function updown(loc, x, y, vec){
-    var blk  = loc.get(x,y);
-    if(isUndefined(blk)) return;
-
-    if( blk.type !== 'block' ) {
-      leftright(loc, x, y, -1);
-      leftright(loc, x, y,  1);
-      updown(loc, x, (y + vec), vec);
-    }
-
-    return;
-  }
-
-  function leftright(loc, x, y, vec){
-    var blk  = loc.get(x,y);
-    if(isUndefined(blk)) return;
-
-    if( blk.type !== 'block' ) {
-      redbox(blk.x, blk.y, BOX_SIZE);
-      leftright( loc, (x + vec), y, vec );
-    }
-
-    return;
-  }
 
   function findMarker(map,step){
 
@@ -160,11 +137,5 @@
   var x = _marker.x, y = _marker.y;
 
   new_parasite(loc, x, y);
-  //updown(loc, x, y, 1)
-  //updown(loc, x, y, -1);
-  console.log(loc.get(5,5));
-
-
-
 
 })();
