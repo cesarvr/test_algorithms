@@ -122,12 +122,12 @@
   var ctx = document.getElementById("myCanvas").getContext("2d");
 
   var map ='XXXXXXXXXX'
-      map+='X00XXX000X'
+      map+='X00XXX0X0X'
       map+='X000000X0X'
       map+='X0XXXX0X0X'
-      map+='X00X0X0X0X'
+      map+='X00X000X0X'
       map+='XX0X0X0X0X'
-      map+='X00X@0000X'
+      map+='X00X@X000X'
       map+='XXXXXXXXXX'
 
   var _grid = make_map(map, 10, 5);
