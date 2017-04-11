@@ -144,9 +144,7 @@
 
 
     function findMarker(map, step) {
-
-        for (var i = 0; i < map.length; i++) {
-
+        for (var i = 0; i < map.length; i++)
             if (map[i] === '@') {
                 var y = Math.floor(i / step);
                 var x = i - (y * step);
@@ -155,16 +153,68 @@
                     y: y
                 }
             }
+
+        return null;
+    }
+
+    var make_node = (graph, is_target)=> {
+      return {
+              x:graph.x,
+              y:graph.y,
+              target: is_target || false,
+              next: null
+            };
+    }
+
+    var leaf = function(){
+      var path = [];
+      return function search(){
+
+        if(graph.type === '$') return make_node(graph, true);
+
+        var node = make_node(graph)
+
+        var nearby = graph.nodes
+
+        for(var index in nearby) {
+          var node = nearby[index];
+          path.push(node);
         }
+
+
+        //
+        //                     x
+        //                     |
+        //                x -> x - $
+        // x -> x -> x -> |
+        //                x -> x
+        //                     |
+        //                     x
+      
+      }
     }
 
 
-  
+    function pathFind(graph, _path){
+      var path = _path || [];
+      if(graph.type === '$') return graph;
+
+      var nearby = graph.nodes;
+
+      for(var index in nearby){
+        var node = nearby[index];
+
+      }
+
+    }
+
+
+
 
 
     function drawPath(path) {
 
-        if (isUndefined(path.node)) return;
+        if (isUndefined(path)) return;
         draw_red(path.node, 900);
         if (isUndefined(path.next) || path.next == null) return;
         drawPath(path.next);
@@ -173,13 +223,13 @@
     var ctx = document.getElementById("myCanvas").getContext("2d");
 
     var map = 'XXXXXXXXXX'
-    map += 'X00XXX0X0X'
-    map += 'X000000X0X'
-    map += 'X0XXXX0X0X'
-    map += 'X00X000X0X'
-    map += 'XX0X0X0X$X'
-    map += 'X00X@X000X'
-    map += 'XXXXXXXXXX'
+       map += 'X00XXX0X0X'
+       map += 'X000000X0X'
+       map += 'X0XXXX0X0X'
+       map += 'X00X000X0X'
+       map += 'XX0X0X0X$X'
+       map += 'X00X@X000X'
+       map += 'XXXXXXXXXX'
 
     var _grid = make_map(map, 10, 5);
     var _marker = findMarker(map, 10);
@@ -192,7 +242,9 @@
 
     var path = pathFind(graph);
 
-    drawPath(path);
+    console.log('path ->', pathFind)
+    debugger;
+  //  drawPath(path);
 
 
 
