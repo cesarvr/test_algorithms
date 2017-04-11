@@ -161,63 +161,80 @@
       return {
               x:graph.x,
               y:graph.y,
+              type: graph.type,
               target: is_target || false,
               next: null
             };
     }
 
-    var leaf = function(){
-      var path = [];
-      return function search(){
 
-        if(graph.type === '$') return make_node(graph, true);
+    /*
 
-        var node = make_node(graph)
+                             x                   stack: x, x, x, [0] a, x, x
+                             |                                   [1] b, x, [0] x
+                        b -> x - $                                         [1] $
+         x -> x -> x -> |
+                        a -> x
+                             |
+                             x
+    */
+
+  function traverse(node, _cnt){
+    var cnt = _cnt || 0;
+
+
+    if(isUndefined(node) || node === null) {
+      return {nodes: cnt,  found:false};
+    }
+
+
+    if(node.type === '$') return {nodes: cnt,  found:true};
+
+
+            cnt ++;
+    return traverse(node.next, cnt);
+  }
+
+  function search(graph){
+        if(graph.type === '$') {
+          return make_node(graph, true);
+        }
 
         var nearby = graph.nodes
 
-        for(var index in nearby) {
-          var node = nearby[index];
-          path.push(node);
-        }
+        if( nearby.length === 1 ) {
 
+          var node = make_node(graph)
+          node.next = search( nearby[0] );
 
-        //
-        //                     x
-        //                     |
-        //                x -> x - $
-        // x -> x -> x -> |
-        //                x -> x
-        //                     |
-        //                     x
-      
-      }
-    }
+        }else
+          for(var index in nearby) {
+            var node = make_node(graph)
+            var candidate = nearby[index];
 
+            node.next = search(candidate);
+            var tree = traverse(node)
 
-    function pathFind(graph, _path){
-      var path = _path || [];
-      if(graph.type === '$') return graph;
+            console.log('traverse ->', tree, ' index->', index);
 
-      var nearby = graph.nodes;
+            if(tree.found)
+              return node;
 
-      for(var index in nearby){
-        var node = nearby[index];
+          }
 
-      }
-
-    }
+        return node;
+  }
 
 
 
 
 
-    function drawPath(path) {
+    function drawPath(node) {
 
-        if (isUndefined(path)) return;
-        draw_red(path.node, 900);
-        if (isUndefined(path.next) || path.next == null) return;
-        drawPath(path.next);
+        if (isUndefined(node)) return;
+        draw_red(node, 900);
+        if (isUndefined(node.next) || node.next == null) return;
+        drawPath(node.next);
     }
 
     var ctx = document.getElementById("myCanvas").getContext("2d");
@@ -227,8 +244,8 @@
        map += 'X000000X0X'
        map += 'X0XXXX0X0X'
        map += 'X00X000X0X'
-       map += 'XX0X0X0X$X'
-       map += 'X00X@X000X'
+       map += 'XX0X0X0X0X'
+       map += 'X00X@0$00X'
        map += 'XXXXXXXXXX'
 
     var _grid = make_map(map, 10, 5);
@@ -240,12 +257,8 @@
 
     var graph = new_parasite(loc, x, y);
 
-    var path = pathFind(graph);
+    var path = search(graph);
 
-    console.log('path ->', pathFind)
-    debugger;
-  //  drawPath(path);
-
-
+    drawPath(path);
 
 })();
